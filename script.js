@@ -1,6 +1,5 @@
   const coordinates = []
 
-
   async function getData() {
       console.log('in');
       const startPoints = await fetch('start_points.csv')
@@ -16,7 +15,9 @@
           const end1 = row[2]
           const end2 = row[3]
           const speed = row[4]
-          coordinates.push([start1, start2, end1, end2, speed])
+          const delay = row[5]
+          const color = row[6]
+          coordinates.push([start1, start2, end1, end2, speed, delay, color])
       })
 
       console.log(coordinates);
@@ -28,6 +29,8 @@
       scope: 'world',
       element: document.getElementById('container'),
       projection: 'equirectangular',
+      innerHeight: 'full',
+      outerHeight: 'full',
       fills: {
           defaultFill: "#ABDDA4",
           gt50: '#e6e6e6',
@@ -55,7 +58,6 @@
 
   });
 
-
   getData().then(() => {
       var arcs = []
       coordinates.forEach(elem => {
@@ -69,19 +71,27 @@
                   longitude: elem[3]
               },
               options: {
-                  animationSpeed: elem[4] * 1000
+                  animationSpeed: elem[4] * 1000,
+                  strokeColor: elem[6],
               }
           })
       })
-      console.log(typeof(arcs));
 
 
-      console.log(arcs);
-      map.arc(arcs,
+      map.arc(arcs, {
+          animationSpeed: 2000,
+          strokeWidth: 1.4,
+          arcSharpness: 1,
+          strokeDasharray: 5,
+          addClass: 'dashed'
+      })
 
-          {
-              animationSpeed: 2000,
-              strokeWidth: 1,
-              arcSharpness: 1.4
-          })
-  }).then(map.graticule())
+  }).then(setTimeout(() => {
+      var elems = document.getElementsByClassName('datamaps-arc')
+      for (var i = 0; i <= elems.length; i++) {
+          console.log(elems[i]);
+          //   elems[i].style.transition = 'strokeDasharray 2000ms ease-out 0s';
+          elems[i].style.strokeDasharray = 5;
+          //   transition: stroke-dashoffset 2000ms ease-out 0s; stroke-dasharray: 5; stroke-dashoffset: 0;
+      }
+  }, 1000)).then(map.graticule())

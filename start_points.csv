@@ -1,4 +1,4 @@
-start_lat,start_long,end_lat,end_long,speed
-40,-74,19,72,2
-51,-0.1,-14,-51,1
-35,139,54,115,5
+start_lat,start_long,end_lat,end_long,speed,delay,color
+40,-74,19,72,2,3,green
+51,-0.1,-14,-51,1,7,#000000
+35,139,54,115,5,1,"rgb(0, 124, 293)"
